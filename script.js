@@ -68,21 +68,44 @@ document.querySelectorAll('nav a').forEach(anchor => {
     });
 });
 
-// Form Submission (Demo)
+// Form Submission (WhatsApp Integration)
 const form = document.querySelector('.booking-form');
 if (form) {
     form.addEventListener('submit', (e) => {
         e.preventDefault();
+
+        // Get form data
+        const name = form.querySelector('input[placeholder="Your Name"]').value;
+        const email = form.querySelector('input[placeholder="Your Email"]').value;
+        const date = form.querySelector('input[type="date"]').value;
+        const guests = form.querySelector('select').value;
+
+        // Construct WhatsApp message
+        const message = `Hello Shringar Palace Garden, I would like to enquire about booking your venue.
+        
+*Name:* ${name}
+*Email:* ${email}
+*Event Date:* ${date}
+*Estimated Guests:* ${guests}
+
+Please let me know about the availability and pricing. Thank you!`;
+
+        // Encode message for URL
+        const encodedMessage = encodeURIComponent(message);
+
+        // Redirect to WhatsApp
+        const whatsappUrl = `https://wa.me/919845059666?text=${encodedMessage}`;
+
+        // Visual feedback
         const btn = form.querySelector('button');
         const originalText = btn.innerText;
-
-        btn.innerText = 'Sending Enquiry...';
+        btn.innerText = 'Redirecting to WhatsApp...';
         btn.disabled = true;
 
-        // Simulate API call
         setTimeout(() => {
-            btn.innerText = 'Enquiry Sent! We will contact you soon.';
-            btn.style.backgroundColor = '#1B4332';
+            window.open(whatsappUrl, '_blank');
+            btn.innerText = 'Sent to WhatsApp!';
+            btn.style.backgroundColor = '#128C7E';
             form.reset();
 
             setTimeout(() => {
@@ -90,6 +113,6 @@ if (form) {
                 btn.disabled = false;
                 btn.style.backgroundColor = '';
             }, 3000);
-        }, 1500);
+        }, 1000);
     });
 }
